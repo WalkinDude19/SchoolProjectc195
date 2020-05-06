@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="560.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appControllers.Main_Screen_Controller">
+   <children>
+      <Label fx:id="lbl_title" layoutX="468.0" layoutY="14.0" prefHeight="28.0" prefWidth="318.0" text="Appointment Scheduling Application">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Button fx:id="btn_Add_Appt" layoutX="237.0" layoutY="50.0" mnemonicParsing="false" onAction="#add_Appt_Action" prefHeight="25.0" prefWidth="112.0" text="Add Appointment" />
+      <Button fx:id="btn_Mod_Appt" layoutX="423.0" layoutY="50.0" mnemonicParsing="false" onAction="#mod_Appt_Action" prefHeight="25.0" prefWidth="132.0" text="Modify Appointment" />
+      <Button fx:id="btn_Add_Cust" layoutX="237.0" layoutY="90.0" mnemonicParsing="false" onAction="#add_Cust_Action" prefHeight="25.0" prefWidth="112.0" text="Add Customer" />
+      <Button fx:id="btn_Mod_Cust" layoutX="423.0" layoutY="90.0" mnemonicParsing="false" onAction="#mod_Cust_Action" prefHeight="25.0" prefWidth="132.0" text="Modify Customer" />
+      <Button fx:id="btn_Reports" layoutX="237.0" layoutY="130.0" mnemonicParsing="false" onAction="#reports_Action" prefHeight="25.0" prefWidth="112.0" text="Reports" />
+      <AnchorPane layoutY="195.0" prefHeight="88.0" prefWidth="800.0">
+         <children>
+            <Label layoutX="7.0" layoutY="10.0" text="Appointment Schedule" underline="true">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="date_selector" layoutX="642.0" layoutY="13.0" onAction="#date_Select_Action" prefHeight="27.0" prefWidth="150.0" promptText="Select a date" />
+            <RadioButton fx:id="rdo_weekly" layoutX="301.0" layoutY="18.0" mnemonicParsing="false" onAction="#cal_Week_Action" text="View by Week" />
+            <RadioButton fx:id="rdo_monthly" layoutX="301.0" layoutY="42.0" mnemonicParsing="false" onAction="#cal_Mon_Action" text="View by Month" />
+            <RadioButton fx:id="rdo_all" layoutX="301.0" layoutY="65.0" mnemonicParsing="false" onAction="#cal_All_Action" text="View All" />
+         </children></AnchorPane>
+      <Button fx:id="btn_logout" layoutX="423.0" layoutY="130.0" mnemonicParsing="false" onAction="#logout_Action" prefHeight="25.0" prefWidth="132.0" text="Logout" />
+      <TableView fx:id="table_calendar" layoutX="5.0" layoutY="286.0" prefHeight="267.0" prefWidth="790.0">
+        <columns>
+          <TableColumn fx:id="col_Appt_ID" prefWidth="53.0" text="Appt ID" />
+          <TableColumn fx:id="col_Appt_Name" prefWidth="107.0" text="Customer" />
+            <TableColumn fx:id="col_Appt_Title" prefWidth="72.0" text="Title" />
+            <TableColumn fx:id="col_Appt_Desc" prefWidth="89.0" text="Description" />
+            <TableColumn fx:id="col_Appt_Loc" prefWidth="74.0" text="Location" />
+            <TableColumn fx:id="col_Appt_Type" prefWidth="74.0" text="Type" />
+            <TableColumn fx:id="col_Appt_Date" prefWidth="138.0" text="Date" />
+            <TableColumn fx:id="col_Appt_Start" prefWidth="83.0" text="Start Time" />
+            <TableColumn fx:id="col_Appt_End" prefWidth="99.0" text="End Time" />
+        </columns>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </TableView>
+   </children>
+</AnchorPane>

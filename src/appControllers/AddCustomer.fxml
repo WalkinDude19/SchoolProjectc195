@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="552.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appControllers.AddCustomerController">
+<AnchorPane id="AnchorPane" prefHeight="552.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appControllers.Add_Customer_Controller">
    <children>
-      <Label layoutX="260.0" layoutY="15.0" text="Add New Customer">
+      <Label layoutX="512.0" layoutY="14.0" text="Add New Customer">
          <font>
             <Font size="21.0" />
          </font>
@@ -41,20 +41,21 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
+            <TextField fx:id="txt_name" GridPane.columnIndex="1" />
+            <TextField fx:id="txt_address" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txt_address2" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cbo_city" prefHeight="27.0" prefWidth="217.0" promptText="Choose City" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="txt_zip" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="txt_phone" prefHeight="27.0" prefWidth="285.0" promptText="555-5555" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="Name" />
             <Label text="Address Line 1" GridPane.rowIndex="1" />
             <Label text="Address Line 2" GridPane.rowIndex="2" />
             <Label text="Zip Code" GridPane.rowIndex="4" />
-            <TextField fx:id="txt_name" GridPane.columnIndex="1" />
-            <TextField fx:id="txt_address" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="txt_address2" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Phone Number" GridPane.rowIndex="5" />
-            <TextField fx:id="txt_zip" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="txt_phone" prefHeight="27.0" prefWidth="285.0" promptText="555-5555" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ComboBox fx:id="cbo_city" prefHeight="27.0" prefWidth="217.0" promptText="Choose City" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="City" GridPane.rowIndex="3" />
          </children>
       </GridPane>
+      <Button fx:id="btn_add" layoutX="319.0" layoutY="239.0" mnemonicParsing="false" onAction="#add_Action" prefHeight="27.0" prefWidth="56.0" text="Add" />
       <TableView fx:id="table_customers" layoutX="18.0" layoutY="299.0" prefHeight="244.0" prefWidth="676.0">
         <columns>
           <TableColumn fx:id="col_cust_id" prefWidth="26.0" text="ID" />
@@ -67,8 +68,6 @@
             <TableColumn fx:id="col_cust_phone" prefWidth="118.0" text="Phone" />
         </columns>
       </TableView>
-      <Button fx:id="btn_clear" layoutX="643.0" layoutY="92.0" mnemonicParsing="false" onAction="#clear_Action" prefHeight="27.0" prefWidth="56.0" text="Clear" />
-      <Button fx:id="btn_add" layoutX="643.0" layoutY="58.0" mnemonicParsing="false" onAction="#add_Action" prefHeight="27.0" prefWidth="56.0" text="Add" />
-      <Button fx:id="btn_exit" layoutX="643.0" layoutY="211.0" mnemonicParsing="false" onAction="#exit_Action" prefHeight="27.0" prefWidth="56.0" text="Exit" />
+      <Button fx:id="btn_exit" layoutX="18.0" layoutY="14.0" mnemonicParsing="false" onAction="#exit_Action" prefHeight="27.0" prefWidth="56.0" text="Exit" />
    </children>
 </AnchorPane>

@@ -6,18 +6,18 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
     
-    private static final String DBNAME = "U05bPD";
+   private static final String DBNAME = "U05bPD";
     private static final String DB_URL = "jdbc:mysql://3.227.166.251/" + DBNAME;
     private static final String USERNAME = "U05bPD";
     private static final String PASSWORD = "53688457744";
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static Connection connection;
+    static Connection conn;
     
 
     public static void makeConnection() throws ClassNotFoundException, SQLException {
         
         Class.forName(JDBC_DRIVER);
-        connection = (Connection) DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+        conn = (Connection) DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
         System.out.println("Connection successful");   
     }
     
@@ -30,7 +30,7 @@ public class DatabaseConnection {
     
     
     public static void closeConnection() throws ClassNotFoundException, SQLException {
-        connection.close();
+        conn.close();
         System.out.println("Connection closed.");
     }
 }

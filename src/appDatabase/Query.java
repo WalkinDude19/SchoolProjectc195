@@ -3,7 +3,6 @@ package appDatabase;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -12,13 +11,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import static appModels.Alerts.impending_Appt;
 import appModels.User;
-import static appDatabase.DatabaseConnection.connection;
+import static appDatabase.DatabaseConnection.conn;
 
 public class Query {
     
-    private static String query;
-    private static Statement statement;
-    private static ResultSet result_set;
+
     static ObservableList<String> cities = FXCollections.observableArrayList();
     static ObservableList<String> types = FXCollections.observableArrayList();
     static ObservableList<String> customers_Table = FXCollections.observableArrayList();
@@ -29,16 +26,11 @@ public class Query {
     public static boolean login_Query(String usernameInput, String passwordInput) {
             try{
                 DatabaseConnection.makeConnection();
-                PreparedStatement p_statement = connection.prepareStatement("SELECT * FROM user WHERE userName=? AND password=?");
+                PreparedStatement p_statement = conn.prepareStatement("SELECT * FROM user WHERE userName=? AND password=?");
                 p_statement.setString(1, usernameInput);
                 p_statement.setString(2, passwordInput);
                 ResultSet rs = p_statement.executeQuery();
-                if (rs.next()) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
+                return rs.next();
             } catch (ClassNotFoundException | SQLException e) {
                 System.out.println("Error: " + e.getMessage());
                 return false;
@@ -49,7 +41,7 @@ public class Query {
 
     public static boolean appt_within_Fifteen() {
         try {
-            ResultSet earliest_Appt = connection.createStatement().executeQuery(String.format("SELECT customerName "
+            ResultSet earliest_Appt = conn.createStatement().executeQuery(String.format("SELECT customerName "
                     + "FROM customer c INNER JOIN appointment a ON c.customerId=a.customerId INNER JOIN user u ON a.userId=u.userId "
                     + "WHERE a.userId='%s' AND a.start BETWEEN '%s' AND '%s'",
                     User.get_Current_User_ID(), LocalDateTime.now(ZoneId.of("UTC")), LocalDateTime.now(ZoneId.of("UTC")).plusMinutes(15)));
@@ -68,10 +60,10 @@ public class Query {
 
     
 
-    public static ObservableList<String> getCities() {
+    public static ObservableList<String> get_Cities() {
         try {
             cities.removeAll(cities); //prevents duplication
-            ResultSet city_List = connection.createStatement().executeQuery("SELECT city FROM city;");
+            ResultSet city_List = conn.createStatement().executeQuery("SELECT city FROM city;");
             while (city_List.next()) {
                 cities.add(city_List.getString("city"));
             }
@@ -86,19 +78,19 @@ public class Query {
 
     public static void add_Customer(String name, String address1, String address2, String zip, String city, String phone) throws SQLException {
             
-            ResultSet rs_Get_City_ID = connection.createStatement().executeQuery(String.format("SELECT cityId FROM city WHERE city = '%s'", city));
+            ResultSet rs_Get_City_ID = conn.createStatement().executeQuery(String.format("SELECT cityId FROM city WHERE city = '%s'", city));
             rs_Get_City_ID.next();
             
-            connection.createStatement().executeUpdate(String.format("INSERT INTO address "
+            conn.createStatement().executeUpdate(String.format("INSERT INTO address "
                     + "(address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                     "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", 
                     address1, address2, rs_Get_City_ID.getString("cityId"), zip, phone, LocalDateTime.now(), User.get_Current_Username(), LocalDateTime.now(), User.get_Current_Username()));
             
-            ResultSet rs_Get_Address_ID = connection.createStatement().executeQuery(String.format("SELECT addressId FROM address WHERE address='%s' AND address2='%s' AND cityId='%s' AND postalCode='%s'",
+            ResultSet rs_Get_Address_ID = conn.createStatement().executeQuery(String.format("SELECT addressId FROM address WHERE address='%s' AND address2='%s' AND cityId='%s' AND postalCode='%s'",
                                     address1, address2, rs_Get_City_ID.getString("cityId"), zip));
             rs_Get_Address_ID.next();
             
-            connection.createStatement().executeUpdate(String.format("INSERT INTO customer "
+            conn.createStatement().executeUpdate(String.format("INSERT INTO customer "
                     + "(customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                     "VALUES ('%s', '%s', 1, '%s', '%s', '%s', '%s')", 
                     name, rs_Get_Address_ID.getString("addressId"), LocalDateTime.now(), User.get_Current_Username(), LocalDateTime.now(), User.get_Current_Username()));    
@@ -109,16 +101,16 @@ public class Query {
     
     public static void delete_Customer(String id){
         try {
-            ResultSet rs_Get_Address_ID = connection.createStatement().executeQuery(String.format("SELECT addressId FROM customer WHERE customerId='%s'", id));
+            ResultSet rs_Get_Address_ID = conn.createStatement().executeQuery(String.format("SELECT addressId FROM customer WHERE customerId='%s'", id));
             rs_Get_Address_ID.next();
             
-            connection.createStatement().executeUpdate(String.format("DELETE FROM customer"
+            conn.createStatement().executeUpdate(String.format("DELETE FROM customer"
                     + " WHERE customerId='%s'", id));
 
-            connection.createStatement().executeUpdate(String.format("DELETE FROM address"
+            conn.createStatement().executeUpdate(String.format("DELETE FROM address"
                     + " WHERE addressId='%s'", rs_Get_Address_ID.getString("addressId")));
             
-            connection.createStatement().executeUpdate(String.format("DELETE FROM appointment"
+            conn.createStatement().executeUpdate(String.format("DELETE FROM appointment"
                     + " WHERE customerId='%s'", id));
             
         } catch (SQLException e) {
@@ -132,22 +124,22 @@ public class Query {
     public static void edit_Customer(String id, String name, String address1, String address2, String city, String zip, String phone) {
         try {
        
-            connection.createStatement().executeUpdate(String.format("UPDATE customer"
+            conn.createStatement().executeUpdate(String.format("UPDATE customer"
                     + " SET customerName='%s', lastUpdate='%s', lastUpdateBy='%s'" 
                     + " WHERE customerId='%s'",
                     name, LocalDateTime.now(), User.get_Current_Username(), id));
             
             
-            ResultSet rs_Get_City_ID = connection.createStatement().executeQuery(String.format("SELECT cityId FROM city WHERE city = '%s'", city));
+            ResultSet rs_Get_City_ID = conn.createStatement().executeQuery(String.format("SELECT cityId FROM city WHERE city = '%s'", city));
             rs_Get_City_ID.next();
             
 
-            connection.createStatement().executeUpdate(String.format("UPDATE address"
+            conn.createStatement().executeUpdate(String.format("UPDATE address"
                     + " SET address='%s', address2='%s', cityId='%s', postalCode='%s', phone='%s', lastUpdate='%s', lastUpdateBy='%s'" 
                     + " WHERE addressId='%s'",
                     address1, address2, rs_Get_City_ID.getString("cityId"), zip, phone, LocalDateTime.now(), User.get_Current_Username(), id));
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error editing customer: " + e.getMessage());
         }
     }
@@ -212,17 +204,12 @@ public class Query {
        
         LocalTime start = LocalTime.parse(utc_Start);
         LocalTime end = LocalTime.parse(utc_End);
-        LocalTime open = LocalTime.parse("08:59");
+        LocalTime open = LocalTime.parse("07:59");
         LocalTime closed = LocalTime.parse("17:01");
         Boolean bool_Start_Allowed = start.isAfter(open);
         Boolean bool_End_Allowed = end.isBefore(closed);
         
-        if (bool_Start_Allowed && bool_End_Allowed) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return bool_Start_Allowed && bool_End_Allowed;
         
     }
 
@@ -238,7 +225,7 @@ public class Query {
                 String utc_End = ldt_End.toString();
 
                
-                ResultSet getOverlap = connection.createStatement().executeQuery(String.format(
+                ResultSet getOverlap = conn.createStatement().executeQuery(String.format(
                            "SELECT start, end, customerName FROM appointment a INNER JOIN customer c ON a.customerId=c.customerId " +
                            "WHERE ('%s' >= start AND '%s' <= end) " +
                            "OR ('%s' <= start AND '%s' >= end) " +
@@ -264,7 +251,7 @@ public class Query {
                 String utc_Start = ldt_Start.toString();
                 String utc_End = ldt_End.toString();
 
-                ResultSet rs_Get_Overlap = connection.createStatement().executeQuery(String.format(
+                ResultSet rs_Get_Overlap = conn.createStatement().executeQuery(String.format(
                            "SELECT start, end, customerName, appointmentId FROM appointment a INNER JOIN customer c ON a.customerId=c.customerId " +
                            "WHERE ('%s' >= start AND '%s' <= end) " +
                            "OR ('%s' <= start AND '%s' >= end) " +
@@ -306,7 +293,7 @@ public class Query {
             
             System.out.println("Converted date and start time (UTC): " + utc_Start);
 
-            connection.createStatement().executeUpdate(String.format("INSERT INTO appointment "
+            conn.createStatement().executeUpdate(String.format("INSERT INTO appointment "
                     + "(customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                     "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", 
                     id, User.get_Current_User_ID(), title, description, location, contact, type, url, utc_Start, utc_End, LocalDateTime.now(), User.get_Current_Username(), LocalDateTime.now(), User.get_Current_Username()));  
@@ -316,9 +303,9 @@ public class Query {
     
     public static void delete_Appointment(String id){
         try {
-            connection.createStatement().executeUpdate(String.format("DELETE FROM appointment WHERE appointmentId='%s'", id));
+            conn.createStatement().executeUpdate(String.format("DELETE FROM appointment WHERE appointmentId='%s'", id));
   
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error deleting appointment: " + e.getMessage());
         }
     }
@@ -335,10 +322,10 @@ public class Query {
             System.out.println("Converted date and start time (UTC): " + utc_Start);
 
             
-            ResultSet rs_Get_Customer_ID = connection.createStatement().executeQuery(String.format("SELECT customerId FROM appointment WHERE appointmentId = '%s'", apptId));
+            ResultSet rs_Get_Customer_ID = conn.createStatement().executeQuery(String.format("SELECT customerId FROM appointment WHERE appointmentId = '%s'", apptId));
             rs_Get_Customer_ID.next();
 
-            connection.createStatement().executeUpdate(String.format("UPDATE appointment "
+            conn.createStatement().executeUpdate(String.format("UPDATE appointment "
                     + "SET customerId='%s', userId='%s', title='%s', description='%s', location='%s', contact='%s', type='%s', url='%s', start='%s', end='%s', lastUpdate='%s', lastUpdateBy='%s' " +
                     "WHERE appointmentId='%s'", 
                     rs_Get_Customer_ID.getString("customerId"), User.get_Current_User_ID(), title, description, location, contact, type, url, utc_Start, utc_End, LocalDateTime.now(), User.get_Current_Username(), apptId));  

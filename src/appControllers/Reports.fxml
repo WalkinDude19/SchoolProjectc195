@@ -7,18 +7,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appControllers.ReportsController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appControllers.Report_Controller">
    <children>
-      <TextArea fx:id="txt_report" layoutX="27.0" layoutY="146.0" prefHeight="218.0" prefWidth="544.0" />
-      <Label layoutX="242.0" layoutY="101.0" text="Reports">
+      <Label layoutX="500.0" layoutY="14.0" text="Reports">
          <font>
             <Font size="26.0" />
          </font>
       </Label>
-      <Button fx:id="btn_exit" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#exit_Action" prefHeight="25.0" prefWidth="52.0" text="Exit" />
-      <Button fx:id="btn_report" layoutX="430.0" layoutY="74.0" mnemonicParsing="false" onAction="#report_Action" text="Generate Report" />
       <ChoiceBox fx:id="cbo_report" layoutX="195.0" layoutY="74.0" prefHeight="27.0" prefWidth="227.0" />
+      <Button fx:id="btn_report" layoutX="430.0" layoutY="74.0" mnemonicParsing="false" onAction="#report_Action" text="Generate Report" />
       <Label layoutX="67.0" layoutY="79.0" text="Choose your report:" />
+      <TextArea fx:id="txt_report" layoutX="27.0" layoutY="146.0" prefHeight="218.0" prefWidth="544.0" />
       <Button fx:id="btn_reset" layoutX="518.0" layoutY="367.0" mnemonicParsing="false" onAction="#reset_Action" prefHeight="25.0" prefWidth="52.0" text="Reset" />
+      <Button fx:id="btn_exit" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#exit_Action" prefHeight="25.0" prefWidth="52.0" text="Exit" />
    </children>
 </AnchorPane>
